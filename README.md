@@ -58,10 +58,9 @@ allprojects {
 -[常用功能](#常用功能)<br>
 -[结果回调](#结果回调)<br>
 -[更新日志](#更新日志)<br>
--[混淆](#混淆)<br>
+-[混淆配置](#混淆配置)<br>
 -[兼容性测试](#兼容性测试)<br>
 -[演示效果](#演示效果)<br>
-
 
 ## 功能特点  
 ```
@@ -118,6 +117,52 @@ allprojects {
 
 ```
 
+<<<<<<< HEAD
+=======
+## 集成方式
+
+方式一 compile引入
+
+```
+dependencies {
+    compile 'com.github.LuckSiege.PictureSelector:picture_library:v2.0.6'
+}
+
+```
+
+项目根目录build.gradle加入
+
+```
+allprojects {
+   repositories {
+      jcenter()
+      maven { url 'https://jitpack.io' }
+   }
+}
+```
+
+方式二 maven引入
+
+step 1.
+```
+<repositories>
+       <repository>
+       <id>jitpack.io</id>
+	<url>https://jitpack.io</url>
+       </repository>
+ </repositories>
+```
+step 2.
+```
+<dependency>
+      <groupId>com.github.LuckSiege.PictureSelector</groupId>
+      <artifactId>picture_library</artifactId>
+      <version>v2.0.6</version>
+</dependency>
+
+```
+
+>>>>>>> upstream/master
 ## 常见错误
 ```
  问题一：
@@ -192,6 +237,7 @@ ndk {
 	.enablePreviewAudio() // 是否可播放音频 true or false
  	.compressGrade()// luban压缩档次，默认3档 Luban.THIRD_GEAR、Luban.FIRST_GEAR、Luban.CUSTOM_GEAR
  	.isCamera()// 是否显示拍照按钮 true or false
+	.setOutputCameraPath("/CustomPath")// 自定义拍照保存路径,可不填
  	.enableCrop()// 是否裁剪 true or false
  	.compress()// 是否压缩 true or false
  	.compressMode()//系统自带 or 鲁班压缩 PictureConfig.SYSTEM_COMPRESS_MODE or LUBAN_COMPRESS_MODE
@@ -342,40 +388,9 @@ PictureSelector.create(MainActivity.this).externalPictureVideo(video_path);
 ## 更新日志
 
 # 当前版本：
-###### 版本 v2.0.5
-###### 新增音频功能查询
-###### 修复设置查询视频秒数，0秒视频也能获取到的bug
-###### 修复部分已知bug
-
-# 历版版本：
-
-###### 版本 v2.0.4
-###### 修复多图裁剪网络图片时报错bug
-###### 重构预览图片代码
-###### 修复几处bug
-
-###### 版本 v2.0.3
-###### 修复部分手机拍照重复2张问题
-###### 修复内存不足导致activity被回收引发的问题
-###### 修复PopWindow弹出卡顿一下的问题
-###### 修复部分相片显示不全问题
-###### 修复部分已知bug
-
-###### 版本 v2.0.1
-###### 修复图片排序问题
-###### 修复设置预览图片为false时，单选无效问题
-###### 过滤已损坏图片or视频
-###### 修改启动动画
-###### 移除isRemove() api
-
-###### 版本 v2.0.0
-###### PictureSelector 2.0 UI界面大改版
-###### PictureSelector 2.0 新增全部模式查询 包括图片or视频
-###### PictureSelector 2.0 启动模式由单例模式，改为链式调用
-###### UI主题 改为style.xml 配置，各界面随意定制更加方便
-###### 优化部分代码和体验去除多余逻辑
-###### 重构PictureSelector和urop库关系，解耦两者关系
-###### 修复1.0版本在fragment不回调onActivityResult()
+######  v2.0.6
+###### 1.新增自定拍照保存路径
+###### 2.修复录音不显示时长问题
 
 # 项目使用第三方库：
 ###### 1.glide:3.7.0
@@ -385,7 +400,7 @@ PictureSelector.create(MainActivity.this).externalPictureVideo(video_path);
 ###### 5.luban
 ###### 6.裁剪使用ucrop
 
-## 混淆 
+## 混淆配置 
 ```
 #PictureSelector 2.0
 -keep class com.luck.picture.lib.** { *; }

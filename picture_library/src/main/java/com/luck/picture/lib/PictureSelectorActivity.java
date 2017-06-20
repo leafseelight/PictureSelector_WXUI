@@ -90,6 +90,7 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
     private boolean isPlayAudio = false;
     private CustomDialog audioDialog;
     private int audioH;
+
     //EventBus 3.0 回调
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void eventBus(EventEntity obj) {
@@ -360,7 +361,8 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (cameraIntent.resolveActivity(getPackageManager()) != null) {
             File cameraFile = PictureFileUtils.createCameraFile(this,
-                    mimeType == PictureConfig.TYPE_ALL ? PictureConfig.TYPE_IMAGE : mimeType);
+                    mimeType == PictureConfig.TYPE_ALL ? PictureConfig.TYPE_IMAGE : mimeType,
+                    outputCameraPath);
             cameraPath = cameraFile.getAbsolutePath();
             Uri imageUri = parUri(cameraFile);
             cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
@@ -375,7 +377,8 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
         Intent cameraIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
         if (cameraIntent.resolveActivity(getPackageManager()) != null) {
             File cameraFile = PictureFileUtils.createCameraFile(this, mimeType ==
-                    PictureConfig.TYPE_ALL ? PictureConfig.TYPE_VIDEO : mimeType);
+                            PictureConfig.TYPE_ALL ? PictureConfig.TYPE_VIDEO : mimeType,
+                    outputCameraPath);
             cameraPath = cameraFile.getAbsolutePath();
             Uri imageUri = parUri(cameraFile);
             DebugUtil.i(TAG, "video second:" + recordVideoSecond);
@@ -401,8 +404,11 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
                     Intent cameraIntent = new Intent(MediaStore.Audio.Media.RECORD_SOUND_ACTION);
                     if (cameraIntent.resolveActivity(getPackageManager()) != null) {
                         File cameraFile = PictureFileUtils.createCameraFile
-                                (PictureSelectorActivity.this, mimeType);
+                                (PictureSelectorActivity.this, mimeType,
+                                        outputCameraPath);
                         cameraPath = cameraFile.getAbsolutePath();
+                        Uri imageUri = parUri(cameraFile);
+                        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
                         startActivityForResult(cameraIntent, PictureConfig.REQUEST_CAMERA);
                     }
                 } else {
@@ -935,6 +941,7 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
                     String pictureType = "";
                     if (mimeType == PictureMimeType.ofAudio()) {
                         pictureType = "audio/mpeg";
+                        duration = PictureMimeType.getLocalVideoDuration(cameraPath);
                     } else {
                         pictureType = eqVideo ? PictureMimeType.createVideoType(cameraPath)
                                 : PictureMimeType.createImageType(cameraPath);

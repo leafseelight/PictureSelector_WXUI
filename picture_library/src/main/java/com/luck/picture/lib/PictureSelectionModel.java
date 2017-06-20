@@ -9,6 +9,7 @@ import com.luck.picture.lib.config.PictureSelectionConfig;
 import com.luck.picture.lib.entity.LocalMedia;
 import com.luck.picture.lib.tools.DoubleUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -298,6 +299,15 @@ public class PictureSelectionModel {
     }
 
     /**
+     * @param outputCameraPath Camera save path
+     * @return
+     */
+    public PictureSelectionModel setOutputCameraPath(String outputCameraPath) {
+        selectionConfig.outputCameraPath = outputCameraPath;
+        return this;
+    }
+
+    /**
      * @param isGif Whether to open gif
      * @return
      */
@@ -338,6 +348,9 @@ public class PictureSelectionModel {
      * @return
      */
     public PictureSelectionModel selectionMedia(List<LocalMedia> selectionMedia) {
+        if (selectionMedia == null) {
+            selectionMedia = new ArrayList<>();
+        }
         selectionConfig.selectionMedias = selectionMedia;
         return this;
     }
