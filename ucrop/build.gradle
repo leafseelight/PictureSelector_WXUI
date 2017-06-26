@@ -1,11 +1,12 @@
 apply plugin: 'com.android.library'
-
+apply plugin: 'maven-publish'
+apply plugin: 'maven'
 android {
-    compileSdkVersion 23
+    compileSdkVersion 25
     buildToolsVersion '25.0.2'
 
     defaultConfig {
-        minSdkVersion 10
+        minSdkVersion 14
         targetSdkVersion 23
         versionCode 22
         versionName "2.2.0-native"
@@ -18,14 +19,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
-    }
-    lintOptions {
-        abortOnError false
-    }
-
     resourcePrefix 'ucrop_'
 
     sourceSets.main {
@@ -35,7 +28,27 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:23.4.0'
-    compile 'com.android.support:recyclerview-v7:23.4.0'
+    compile 'com.android.support:appcompat-v7:25.3.1'
+    compile 'com.android.support:recyclerview-v7:25.3.1'
     compile 'com.github.bumptech.glide:glide:3.7.0'
+}
+
+def MAVEN_LOCAL_PATH ='http://115.29.162.222/nexus/content/repositories/snapshots'
+def ARTIFACT_ID = 'ucrop'
+def VERSION_NAME = '1.0.0-SNAPSHOT'
+def GROUP_ID = 'com.common.lib'
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url:MAVEN_LOCAL_PATH ){
+                authentication(userName: 'admin', password:'admin123')
+            }
+            pom.project {
+                groupId GROUP_ID
+                artifactId ARTIFACT_ID
+                version VERSION_NAME
+                packaging 'aar'
+            }
+        }
+    }
 }
